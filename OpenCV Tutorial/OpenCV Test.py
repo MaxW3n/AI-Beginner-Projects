@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-img = cv2.imread('tumblr_n2lq5lwa8H1sikueao1_1280.jpg')
+img = cv2.imread('OpenCV Tutorial/tumblr_n2lq5lwa8H1sikueao1_1280.jpg')
 # Making Blank Canvas
 blank = np.zeros((500, 500, 3), dtype='uint8')
 # Resizing Image

@@ -26,6 +26,8 @@ while True:
             cv2.rectangle(face_frame, (x_, y_), (x_+w_, y_+h_), (0, 0, 255), 2)
         if len(face_frame) > 0:
             cv2.imshow('TestFaceRecog', face_frame)
+    
+        cv2.line(frame, )
     cv2.imshow('TestSmileRecog', frame)
 
     key = cv2.waitKey(1)
