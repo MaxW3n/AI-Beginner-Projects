@@ -11,6 +11,19 @@ def rescale(frame, scale):
     height = int(frame.shape[0] * scale)
     # INTER_AREA is for shrinking, INTER_LINEAR is for upscaling, INTER_CUBIC is for high quality upscale
     return cv2.resize(img, (width, height), interpolation=cv2.INTER_AREA)
+# Transforming Image
+def transform(frame, x, y):
+    transmat = np.float32([[1, 0, x], [0, 1, y]])
+    return cv2.warpAffine(frame, transmat, (frame.shape[1], frame.shape[0]))
+# Rotating Image
+def rotate(frame, angle, point=None):
+    (height, width) = frame.shape[:2]
+    if point == None:
+        point = (width//2, height//2)
+    rotmat = cv2.getRotationMatrix2D(point, angle, 1.0)
+    return cv2.warpAffine(frame, rotmat, (width, height))
+# Flipping: 0 = Vertical, 1 = Horizontal, -1 = Both
+flip = cv2.flip(img, -1)
 # Putting Stuff on Blank Canvas
 blank[0:250, 0:250] = 0,0,255
 cv2.rectangle(blank, (0,250),(250,500),(255,0,0), thickness=10)
@@ -27,12 +40,20 @@ cropped = img[500:800, 500:800]
 canny = cv2.Canny(img, 125, 175)
 dialated = cv2.dilate(canny, (9,9), iterations=4)
 eroded = cv2.erode(dialated, (9,9), iterations=4)
+# Contour list is a list of all of the edge coordinates; heirarchies are all of the shapes within one another
+# RETR_LIST lists all edges, RETR_TREE lists only the heirarchy edges, RETR_EXTERNAL only lists external
+# CHAIN_APPRROX_NONE lists all points, CHAIN_APPROX_SIMPLE lists only the end points
+contours, heirarchies = cv2.findContours(canny, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 # Displaying
 cv2.imshow("Unedited", img)
 cv2.imshow("Scaled", rescale(img, 0.5))
 cv2.imshow('Blank', blank)
 cv2.imshow("Gray",gray)
 cv2.imshow("Blur", blur)
-cv2.imshow("Edges", eroded)
 cv2.imshow("Cropped", cropped)
+cv2.imshow("Shifted IMG", transform(img, 50, 50))
+cv2.imshow("Rotated IMG", rotate(img, 25))
+cv2.imshow("Flipped", flip)
+cv2.imshow("Edges", eroded)
+print(len(contours))
 cv2.waitKey(0)
