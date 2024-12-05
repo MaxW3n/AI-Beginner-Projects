@@ -3,16 +3,14 @@ import random
 trained_face_data = cv2.CascadeClassifier('Face Recognition/haarcascade_frontalface_default.xml')
 
 # img = cv2.imread('IMG_9906.JPG')
-webcam = cv2.VideoCapture(0)
+webcam = cv2.VideoCapture(1)
 
 while True:
     successframe, frame = webcam.read()
     grayscaled_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     face_coordinates = trained_face_data.detectMultiScale(grayscaled_img, minNeighbors=5)
-    edge = cv2.Canny(frame, 50, 100)
     for (x,y,w,h) in face_coordinates:
         cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-        print(x, ", ", y)
     cv2.imshow('TestFaceRecog', frame)
     key = cv2.waitKey(1)
     if key == 113:
